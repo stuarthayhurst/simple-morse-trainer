@@ -69,3 +69,10 @@ class MorseProcessor():
 
 reader = MorseProcessor(10)
 reader.readString("PARIS")
+
+#TODO:
+# - Implement a trainer
+#   - Take data, split by level and play
+#   - Accept input and validate
+# - Random data mode
+# - File reader mode
