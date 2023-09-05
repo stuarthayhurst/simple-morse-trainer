@@ -142,24 +142,33 @@ class MorseTrainer():
     print(f"\nCorrect response: {data}")
     print(f"Accuracy: {((totalCharacters - incorrectCharacters) / totalCharacters) * 100}%")
 
-  def resetFilePosition():
-    self.fileIndex = 0
-
 filename = None
 if len(sys.argv) >= 2:
   filename = sys.argv[1]
 
-targetSpeed = input("Enter a target words per minute: ")
+targetSpeed = input("Enter a target words per minute rate: ")
 try:
   targetSpeed = int(targetSpeed)
 except:
   print(f"Invalid response '{targetSpeed}', must be an integer")
   exit(1)
 
-trainer = MorseTrainer(targetSpeed, filename)
-trainer.train(5, 4)
+blockSize = input("Enter a block size: ")
+try:
+  blockSize = int(blockSize)
+except:
+  print(f"Invalid response '{blockSize}', must be an integer")
+  exit(1)
 
-#TODO loop training (have defaults)
-# - ask about level
-# - ask about block count
-# - if in file mode, ask to reset
+blockCount = input("Enter a block size: ")
+try:
+  blockCount = int(blockCount)
+except:
+  print(f"Invalid response '{blockCount}', must be an integer")
+  exit(1)
+
+trainer = MorseTrainer(targetSpeed, filename)
+
+while True:
+  trainer.train(blockSize, blockCount)
+  input("Press any key to continue\n")
