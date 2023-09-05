@@ -107,7 +107,39 @@ class MorseTrainer():
       self.processor.readString(block)
       firstBlock = False
 
-    #Take input and calculate accuracy
+    #Take response and check accuracy
+    response = input("Enter response:\n")
+    self.validate(response, data, blockCount)
+
+  def validate(self, response, data, blockCount):
+    #Calculate percentage accuracy of response
+    totalCharacters = 0
+    incorrectCharacters = 0
+    responseBlockIndex = 0
+    for i in range(blockCount):
+      correctBlock = data[i]
+
+      #Fetch user block of text, update index
+      newResponseIndex = responseBlockIndex + len(correctBlock)
+      responseBlock = response[responseBlockIndex:newResponseIndex]
+      responseBlockIndex = newResponseIndex
+
+      #Compare the blocks
+      totalCharacters += len(correctBlock)
+      for charIndex in range(len(correctBlock)):
+        correctChar = correctBlock[charIndex]
+        responseChar = ""
+        if len(responseBlock) - 1 >= charIndex:
+          responseChar = responseBlock[charIndex]
+        else:
+          incorrectCharacters += 1
+          continue
+
+        if correctChar != responseChar:
+          incorrectCharacters += 1
+
+    print(f"\nCorrect response: {data}")
+    print(f"Accuracy: {((totalCharacters - incorrectCharacters) / totalCharacters) * 100}%")
 
   def resetFilePosition():
     self.fileIndex = 0
