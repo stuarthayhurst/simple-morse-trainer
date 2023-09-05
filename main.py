@@ -149,7 +149,14 @@ filename = None
 if len(sys.argv) >= 2:
   filename = sys.argv[1]
 
-trainer = MorseTrainer(15, filename)
+targetSpeed = input("Enter a target words per minute: ")
+try:
+  targetSpeed = int(targetSpeed)
+except:
+  print(f"Invalid response '{targetSpeed}', must be an integer")
+  exit(1)
+
+trainer = MorseTrainer(targetSpeed, filename)
 trainer.train(5, 4)
 
 #TODO loop training (have defaults)
