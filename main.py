@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 import time
 import random
 
@@ -144,10 +145,11 @@ class MorseTrainer():
   def resetFilePosition():
     self.fileIndex = 0
 
-#TODO process args
-#TODO ask for target speed
+filename = None
+if len(sys.argv) >= 2:
+  filename = sys.argv[1]
 
-trainer = MorseTrainer(15)
+trainer = MorseTrainer(15, filename)
 trainer.train(5, 4)
 
 #TODO loop training (have defaults)
