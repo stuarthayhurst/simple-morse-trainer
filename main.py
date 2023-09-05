@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import time
+import random
 
 import numpy as np
 import simpleaudio as sa
@@ -67,12 +68,57 @@ class MorseProcessor():
       #Wait between letters
       time.sleep(self.player.letterWaitLength)
 
-reader = MorseProcessor(10)
-reader.readString("PARIS")
+class MorseTrainer():
+  def __init__(self, wordsPerMin, filename = None):
+    self.processor = MorseProcessor(wordsPerMin)
 
-#TODO:
-# - Implement a trainer
-#   - Take data, split by level and play
-#   - Accept input and validate
-# - Random data mode
-# - File reader mode
+    self.inputMethod = "random"
+    self.fileData = None
+    self.fileIndex = 0
+    if filename != None:
+      self.inputMethod = "file"
+      with open(filename) as file:
+        self.fileData = ""
+        for line in file:
+          self.fileData += line.replace("\n", " ")
+      self.fileData = self.fileData.strip()
+
+  def train(self, blockLength, blockCount):
+    data = []
+    if self.inputMethod == "file":
+      for dataIndex in range(blockCount):
+        newIndex = self.fileIndex + blockLength
+        data.append(self.fileData[self.fileIndex:newIndex])
+        self.fileIndex = newIndex
+    else:
+      #Generate blockCount blocks of random data
+      for dataIndex in range(blockCount):
+        symbols = list(characterTable.keys())
+        dataBlock = ""
+        for symbolCount in range(blockLength):
+          dataBlock += symbols[random.randint(0, len(symbols) - 1)]
+        data.append(dataBlock)
+
+    #Play the data
+    firstBlock = True
+    for block in data:
+      if not firstBlock:
+        time.sleep(self.processor.player.wordWaitLength)
+      self.processor.readString(block)
+      firstBlock = False
+
+    #Take input and calculate accuracy
+
+  def resetFilePosition():
+    self.fileIndex = 0
+
+#TODO process args
+#TODO ask for target speed
+
+trainer = MorseTrainer(15)
+trainer.train(5, 4)
+
+#TODO loop training (have defaults)
+# - ask about level
+# - ask about block count
+# - if in file mode, ask to reset
